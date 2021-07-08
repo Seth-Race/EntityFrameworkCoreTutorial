@@ -8,6 +8,17 @@ namespace EntityFrameworkCoreTutorial {
 
             var _context = new salesdbContext();
 
+            var custOrders = from o in _context.Orders
+                             join c in _context.Customers
+                             on o.CustomerId equals c.Id
+                             select new {
+                                 o, c.Name
+                             };
+
+            foreach (var oc in custOrders) {
+                Console.WriteLine($"{oc.o.Description} | {oc.Name}");
+            }
+
             var customers = _context.Customers
                                     .Where(c => c.City == "Cincinnati" && c.Sales >= 50000)
                                     .OrderByDescending(c => c.Name)
@@ -17,7 +28,7 @@ namespace EntityFrameworkCoreTutorial {
                 Console.WriteLine($"{c.Name}|{c.City}|{c.State}|{c.Sales}");
             }
 
-
+            
 
         }
     }
